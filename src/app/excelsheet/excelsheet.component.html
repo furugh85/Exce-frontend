@@ -1,0 +1,66 @@
+<div class="container-fluid content">
+  <div class="row mhsheader">
+    <div class="col-lg-9 col-md-6 col-sm-6">
+      <p class="headertext">CWA Application</p>
+    </div>
+    <div class="col-lg-3 com-md-6 col-sm-6 logo-header">
+      <img src="../../assets/images/ude-logo.png" alt="">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="mhs-uploadfile">
+        <div class="mhsblur">
+          <input class="toggle-input" type="checkbox" id="toggle-btn" />
+          <label class="toggle-label" for="toggle-btn"></label>
+          <div class="mhsswitch">
+            <div class="switch-button">
+              <div class="b-inside"></div>
+            </div>
+          </div>
+          <label class="btn btn-default p-0 mhs-break">
+
+            <input type="text" class="mhs-st" [(ngModel)]="selectedCountry" placeholder="Enter name of country"
+              [formControl]="myControl" [matAutocomplete]="auto">
+
+            <input type="text" class="unifield-mhs" [(ngModel)]="university" [formControl]="myControl"
+              placeholder="University" />
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let country of filteredCountrys | async" [value]="country">
+                {{country}}
+              </mat-option>
+            </mat-autocomplete>
+            <button type="button" class="mhs-choosefile" mat-raised-button (click)="fileInput.click()">Choose
+              File</button>
+
+            <input hidden (change)="selectFile($event)" #fileInput type="file" id="file">
+          </label>
+
+          <button class="btn btn-success btn-sm outline-outward upload" [disabled]="!selectedFiles"
+            (click)="upload()">
+            Upload
+          </button>
+          <button class="btn btn-success btn-sm outline-outward archive" [disabled]="!selectedFiles"
+            (click)="uploadOld()">
+            Archive
+          </button>
+          <div>
+          </div>
+        </div>
+        <div *ngIf="currentFile" class="progress my-3">
+          <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar"
+            attr.aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100"
+            [ngStyle]="{ width: progress + '%' }">
+            {{ progress }}%
+          </div>
+        </div>
+        <div *ngIf="message" class="alert alert-secondary" role="alert">{{ message }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <app-student [data]="users"></app-student>
+    </div>
+  </div>
+</div>

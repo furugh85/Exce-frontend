@@ -1,0 +1,577 @@
+<!-- <h4>mat-select</h4>
+<mat-form-field appearance="standard">
+   <mat-label>Filter</mat-label>
+  <mat-label>Search</mat-label>
+     <input matInput placeholder="Search Course"  #input> // **Send user input to TS**
+</mat-form-field> -->
+<div class="mat-elevation-z8 mhs-example-container mhs-tooltip">
+  <table mat-table [dataSource]="courses" #myTable  multiTemplateDataRows>
+
+    <ng-container matColumnDef="No">
+      <th mat-header-cell *matHeaderCellDef> No. </th>
+      <td mat-cell *matCellDef="let course"> {{course.id}} </td>
+
+    </ng-container>
+
+    <ng-container matColumnDef="Subject1">
+      <th mat-header-cell *matHeaderCellDef> Subject </th>
+      <td mat-cell *matCellDef="let course"> {{course.snameSub}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Exam Method">
+      <th mat-header-cell *matHeaderCellDef> Method </th>
+      <td mat-cell *matCellDef="let course"> {{course.sexamMethod}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="countryOfExam">
+      <th mat-header-cell *matHeaderCellDef> CountryExam</th>
+      <td mat-cell *matCellDef="let course"> {{course.scountryOfExam}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Credit1">
+      <th mat-header-cell *matHeaderCellDef>Credit</th>
+      <td mat-cell *matCellDef="let course"> {{course.screditSub}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Mark1">
+      <th mat-header-cell *matHeaderCellDef>Mark</th>
+      <td mat-cell *matCellDef="let course"> {{course.smarkTrans}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="LFD1">
+      <th mat-header-cell *matHeaderCellDef>LFD</th>
+      <td mat-cell *matCellDef="let course"> {{course.consNum1}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Subject2">
+      <th mat-header-cell *matHeaderCellDef>Subject</th>
+      <td mat-cell [matTooltip]="course.dnameExam" *matCellDef="let course"> {{ (course.dnameExam.length>6)? (course.dnameExam | slice:0:15)+'..':(course.dnameExam)}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="LFD2">
+      <th mat-header-cell *matHeaderCellDef>LFD</th>
+      <td mat-cell *matCellDef="let course"> {{course.consNum2}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Exam Number">
+      <th mat-header-cell *matHeaderCellDef>Exam Number</th>
+      <td mat-cell [matTooltip]="course.dexamNameAndNum" *matCellDef="let course">  {{ (course.dexamNameAndNum.length>6)? (course.dexamNameAndNum | slice:0:15)+'..':(course.dexamNameAndNum)}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Yes|NO">
+      <th mat-header-cell *matHeaderCellDef>Yes|NO</th>
+      <td mat-cell *matCellDef="let course">
+        <span *ngIf="!course.inEditMode">{{course.dyesNo}}</span>
+        <input *ngIf="course.inEditMode" [(ngModel)]="course.dyesNo" style="max-width: 50px;overflow: hidden;" />
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Credit2">
+      <th mat-header-cell *matHeaderCellDef>Credit</th>
+      <td mat-cell *matCellDef="let course">
+        <span *ngIf="!course.inEditMode">{{course.drecogCredit}}</span>
+        <input *ngIf="course.inEditMode" [(ngModel)]="course.drecogCredit" style="max-width: 50px;overflow: hidden;" />
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Mark2">
+      <th mat-header-cell *matHeaderCellDef>Mark</th>
+      <td mat-cell *matCellDef="let course">
+        <span *ngIf="!course.inEditMode">{{course.daquiredMark}}</span>
+        <input *ngIf="course.inEditMode" [(ngModel)]="course.daquiredMark" style="max-width: 50px;overflow: hidden;" />
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="country">
+      <th mat-header-cell *matHeaderCellDef>Country</th>
+      <td mat-cell *matCellDef="let course"> {{course.country}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="university">
+      <th mat-header-cell *matHeaderCellDef>Uni</th>
+      <td mat-cell [matTooltip]="course.university" *matCellDef="let course"> {{ (course.university.length>6)? (course.university | slice:0:6)+'..':(course.university)}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Examinater">
+      <th mat-header-cell *matHeaderCellDef>Examiner</th>
+      <td mat-cell *matCellDef="let course">
+         <span *ngIf="!course.inEditMode"> {{course.nameOfExaminer}} </span>
+        <input *ngIf="course.inEditMode" [(ngModel)]="course.nameOfExaminer" style="max-width: 50px;overflow: hidden;" />
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="action">
+
+      <tr>
+        <th mat-header-cell *matHeaderCellDef> Edit </th>
+      </tr>
+      <tr>
+        <td mat-cell *matCellDef="let course" style="width:20% ">
+
+          <button mat-icon-button color="primary" (click)="course.inEditMode = !course.inEditMode"
+            *ngIf="!course.inEditMode">
+            <mat-icon style="font-size: 1.7em!important;vertical-align:text-top">edit</mat-icon>
+          </button>
+
+          <button mat-icon-button color="primary" (click)="onUpdatecourse(course)" *ngIf="course.inEditMode">
+            <mat-icon style="font-size: 1.7em!important;vertical-align:text-top">save</mat-icon>
+          </button>
+
+          <button mat-icon-button color="primary" (click)="onCancelEdit(course)" *ngIf="course.inEditMode">
+            <mat-icon style="font-size: 1.7em!important;vertical-align:text-top">clear</mat-icon>
+          </button>
+         
+          <button mat-icon-button color="primary"
+            (click)="onSearch(course);expandedElement = expandedElement === course ? null : course"
+            *ngIf="!course.inEditMode">
+            <mat-icon style="font-size: 1.7em!important;vertical-align:text-top">search</mat-icon>
+          </button>
+
+          <button mat-icon-button color="primary"
+          (click)=" onDeleteCourse(course)"
+          *ngIf="!course.inEditMode">
+          <mat-icon ng-really-message="are u sure?"
+          class="material-icons mhs-float mhs-clear"
+           style="font-size: 1.7em!important;vertical-align:text-top" >delete_outline</mat-icon>
+        </button>
+
+        <ng-container *ngIf="course.inEditMode ">
+          <table>
+            <tr><button mat-icon-button color="primary" (click)=" showDetail(course.courseDescriptionEntitiy.description)" >
+                <mat-icon style="font-size: 1.7em!important;vertical-align:text-top">description
+                </mat-icon>
+              </button>
+            </tr>
+        </table>
+        </ng-container>
+        </td>
+      </tr>
+
+    </ng-container>
+
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row"
+      [class.example-expanded-row]="expandedElement === element">
+    </tr>
+
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail'];" class="example-detail-row">
+      
+    </tr>
+
+
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let element" [attr.colspan]=" displayedColumns.length">
+        <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+          <div class="inner-table mat-elevation-z8" *ngIf="expandedElement">
+
+            <mat-form-field appearance="standard">
+              <mat-label>Filter</mat-label>
+              <input matInput (keyup)="applyFilter($event)" placeholder="Search columns" #input>
+              <!-- <mat-icon color="primary">filter_list</mat-icon> -->
+            </mat-form-field>
+            <!-- <mat-form-field appearance="standard">
+              <mat-label>Filter UNI</mat-label>
+              <input matInput (keyup)="applyFilterUni($event)" placeholder="Search columns" #input>
+            </mat-form-field> -->
+            
+
+            <div class="mhs-innertable mhs-tooltip">
+              <table #innerTables mat-table #innerSort="matSort" [dataSource]="innerdataSource" matSort>
+
+                <ng-container matColumnDef="{{innerColumn}}" *ngFor="let innerColumn of displayedColumns">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>{{innerColumn}} </th>
+                  <td mat-cell *matCellDef="let element"> {{element[innerColumn]}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="No">
+                  <th mat-header-cell *matHeaderCellDef>No.</th>
+                  <td mat-cell *matCellDef="let course"> {{course.id}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Subject1">
+                  <th mat-header-cell *matHeaderCellDef>Subject </th>
+                  <td mat-cell *matCellDef="let course">{{course.snameSub}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Exam Method">
+                  <th mat-header-cell *matHeaderCellDef> Exam Method </th>
+                  <td mat-cell *matCellDef="let course"> {{course.sexamMethod}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="countryOfExam">
+                  <th mat-header-cell *matHeaderCellDef>Country</th>
+                  <td mat-cell *matCellDef="let course"> {{course.scountryOfExam}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Credit1">
+                  <th mat-header-cell *matHeaderCellDef>Credit</th>
+                  <td mat-cell *matCellDef="let course"> {{course.screditSub}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Mark1">
+                  <th mat-header-cell *matHeaderCellDef>Mark</th>
+                  <td mat-cell *matCellDef="let course"> {{course.smarkTrans}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="LFD1">
+                  <th mat-header-cell *matHeaderCellDef>LFD</th>
+                  <td mat-cell *matCellDef="let course"> {{course.consNum1}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Subject2">
+                  <th mat-header-cell *matHeaderCellDef>Subject</th>
+                  <td mat-cell [matTooltip]="course.dnameExam" *matCellDef="let course"> {{ (course.dnameExam.length>6)? (course.dnameExam | slice:0:15)+'..':(course.dnameExam)}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="LFD2">
+                  <th mat-header-cell *matHeaderCellDef>LFD</th>
+                  <td mat-cell *matCellDef="let course"> {{course.consNum2}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Exam Number">
+                  <th mat-header-cell *matHeaderCellDef>Exam Number</th>
+                  <td mat-cell [matTooltip]="course.dexamNameAndNum" *matCellDef="let course">  {{ (course.dexamNameAndNum.length>6)? (course.dexamNameAndNum | slice:0:15)+'..':(course.dexamNameAndNum)}}  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Yes|NO">
+                  <th mat-header-cell *matHeaderCellDef>Yes|NO</th>
+                  <td mat-cell *matCellDef="let course"> {{course.dyesNo}} </td> -->
+                </ng-container>
+
+                <ng-container matColumnDef="Credit2">
+                  <th mat-header-cell *matHeaderCellDef>Credit</th>
+                  <td mat-cell *matCellDef="let course"> {{course.drecogCredit}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Mark2">
+                  <th mat-header-cell *matHeaderCellDef>Mark</th>
+                  <td mat-cell *matCellDef="let course"> {{course.daquiredMark}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="country">
+                  <th mat-header-cell *matHeaderCellDef>Country</th>
+                  <td mat-cell *matCellDef="let course"> {{course.country}} </td>
+                </ng-container>
+                <ng-container matColumnDef="university">
+                  <th mat-header-cell *matHeaderCellDef>Uni</th>
+                  <td mat-cell [matTooltip]="course.university" *matCellDef="let course">  {{ (course.university.length>6)? (course.university | slice:0:6)+'..':(course.university)}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Examinater">
+                  <th mat-header-cell *matHeaderCellDef>Examinater</th>
+                  <td mat-cell *matCellDef="let course"> {{course.nameOfExaminer}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                  <ng-container >
+                    <table>
+                      <tr><button mat-icon-button color="primary" (click)=" getTooltip(course.id)" >
+                          <mat-icon style="font-size: 1.7em!important;vertical-align:text-top">description
+                          </mat-icon>
+                        </button></tr>
+                      <td  *ngIf="isShown" >{{course.description}}</td>
+                    </table>
+                  </ng-container>
+          
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+    </ng-container>
+
+  </table>
+  <div class="mhssubmitbtn">
+    <button  (click)="onSubmit(course.user.id)"><i class="fa fa-check" aria-hidden="true"></i></button>
+</div>
+
+  <div class="mhsclosebtn">
+    <button  (click)="onClose()" ><i class="fa fa-times" aria-hidden="true"></i></button>
+</div>
+
+
+</div>
+
+
+<div class="container">
+  <details id="myDetails">
+    <summary>
+      <div class="details-modal-overlay"></div>
+    </summary>
+    <div class="details-modal">
+      <div class="details-modal-title">
+        <h1>Description</h1>
+       
+      </div>
+      <div class="details-modal-content">
+        <p>{{message}}</p>
+      </div>
+    </div>
+  </details>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ta az inja//////////////////////////////////////////////////////////////////////////////////// -->
+
+
+
+
+
+<!-- <table mat-table [dataSource]="courses"  class="mat-elevation-z8"> 
+
+  <ng-container matColumnDef="No">
+    <th mat-header-cell *matHeaderCellDef> No. </th>
+    <td mat-cell *matCellDef="let course"> {{course.id}} </td>  -->
+
+<!-- </ng-container>
+
+  <ng-container matColumnDef="Subject">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let course"> {{course.snameSub}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="Exam Method">
+    <th mat-header-cell *matHeaderCellDef> Exam Method </th>
+    <td mat-cell *matCellDef="let course"> {{course.sexamMethod}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="Credit">
+    <th mat-header-cell *matHeaderCellDef>Credit</th>
+    <td mat-cell *matCellDef="let course"> {{course.screditSub}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="Mark">
+    <th mat-header-cell *matHeaderCellDef>Mark</th>
+    <td mat-cell *matCellDef="let course"> {{course.smarkTrans}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="LFD">
+    <th mat-header-cell *matHeaderCellDef>LFD</th>
+    <td mat-cell *matCellDef="let course"> {{course.consNum1}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="Subject">
+    <th mat-header-cell *matHeaderCellDef>Subject</th>
+    <td mat-cell *matCellDef="let course"> {{course.dnameExam}} </td>
+  </ng-container>  
+  
+  <ng-container matColumnDef="LFD">
+    <th mat-header-cell *matHeaderCellDef>LFD</th>
+    <td mat-cell *matCellDef="let course"> {{course.consNum2}} </td>
+  </ng-container> 
+  
+  <ng-container matColumnDef="Exam Number">
+    <th mat-header-cell *matHeaderCellDef>Exam Number</th>
+    <td mat-cell *matCellDef="let course"> {{course.dexamNameAndNum}} </td>
+  </ng-container> 
+  
+  <ng-container matColumnDef="Yes|NO">
+    <th mat-header-cell *matHeaderCellDef>Yes|NO</th>
+    <td mat-cell *matCellDef="let course"> {{course.dyesNo}} </td>  -->
+
+<!-- </ng-container>  
+  
+   <ng-container matColumnDef="Credit">
+    <th mat-header-cell *matHeaderCellDef>Credit</th>
+    <td mat-cell *matCellDef="let course"> {{course.drecogCredit}} </td>
+  </ng-container> 
+  
+  <ng-container matColumnDef="Mark">
+    <th mat-header-cell *matHeaderCellDef>Mark</th>
+    <td mat-cell *matCellDef="let course"> {{course.daquiredMark}} </td>
+  </ng-container> 
+  
+  <ng-container matColumnDef="country">
+    <th mat-header-cell *matHeaderCellDef>Country</th>
+    <td mat-cell *matCellDef="let course"> {{course.country}} </td>
+  </ng-container> 
+  
+  <ng-container matColumnDef="Examinater">
+    <th mat-header-cell *matHeaderCellDef>Examinater</th>
+    <td mat-cell *matCellDef="let course"> {{course.Examinater}} </td>
+  </ng-container>  
+  
+  <ng-container matColumnDef="Edit">
+    <th mat-header-cell *matHeaderCellDef>Edit</th>
+    <td mat-cell *matCellDef="let course"> {{course.Edit}} </td>
+  </ng-container>  
+  
+
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+
+
+
+<mat-accordion>
+    <mat-expansion-panel  (opened)="panelOpenState = true"
+    (closed)="panelOpenState = false">
+ 
+      <mat-expansion-panel-header >
+        <mat-panel-title>
+          This is the expansion title
+        </mat-panel-title>
+        <mat-panel-description>
+          This is a summary of the content
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <p>This is the primary content of the panel.</p>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel (opened)="panelOpenState = true"
+                         (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Self aware panel
+        </mat-panel-title>
+        <mat-panel-description>
+          Currently I am {{panelOpenState ? 'open' : 'closed'}}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <p>I'm visible because I am open</p>
+    </mat-expansion-panel>
+
+  </mat-accordion> -->
+
+
+
+
+
+<!-- 
+<div class="card my-5" scope="row">
+    <div class="card-body">
+      <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Subject</th>
+            <th scope="col">Exam Method</th>
+            <th scope="col">Credit</th>
+            <th scope="col">Mark</th>
+            <th scope="col">LFD</th>
+            <th scope="col">Subject</th>
+            <th scope="col">LFD</th>
+            <th scope="col">Exam Number</th>
+            <th scope="col">Yes|NO</th>
+            <th scope="col">Credit</th>
+            <th scope="col">Mark</th>
+            <th scope="col">Examinater</th>
+            <th scope="col">country</th>
+            <th scope="col">Edit</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+
+          <tr *ngFor="let course of courses">
+            <td>
+              <div>{{ course.snameSub }} </div>
+              
+            <div *ngIf="course.compare && course.compare.length > 0 ">
+              <br/>
+              <ng-container *ngFor="let comp of course.compare" >
+                  <div style="font-size:.6em;color: green;">{{comp.snameSub}}</div>
+              </ng-container>
+            </div>
+            </td>
+            <td>
+              <div>{{ course.sexamMethod }} </div>
+              <div *ngIf="course.compare && course.compare.length > 0 ">
+                <br/><br/>
+                <br/><br/>
+                <ng-container *ngFor="let comp of course.compare" >
+                    <div>{{comp.sexamMethod}}</div>
+                </ng-container>
+              </div>
+
+            </td>
+            <td>
+              <div>{{ course.screditSub }}</div>
+              <div *ngIf="course.compare && course.compare.length > 0 ">
+                <br/>
+                <ng-container *ngFor="let comp of course.compare" >
+                    <div>{{comp.screditSub}}</div>
+                </ng-container>
+              </div>
+            </td>
+            <td>
+              <div>{{ course.smarkTrans }}</div>
+              <div *ngIf="course.compare && course.compare.length > 0 ">
+                <br/>
+                <ng-container *ngFor="let comp of course.compare" >
+                    <div>{{comp.smarkTrans}}</div>
+                </ng-container>
+              </div>
+            </td>
+            <td>{{ course.consNum1 }}</td>
+            <td>{{ course.dnameExam }}</td>
+            <td>{{ course.consNum2}}</td>
+            <td>{{ course.dexamNameAndNum }}</td>
+            <td>
+              <span *ngIf="!course.inEditMode">{{ course.dyesNo }}</span>
+              <input *ngIf="course.inEditMode" [(ngModel)]="course.dyesNo"/>  
+            </td>
+            <td>
+              <span *ngIf="!course.inEditMode">{{ course.drecogCredit }}</span>
+              <input *ngIf="course.inEditMode" [(ngModel)]="course.drecogCredit"/>
+            </td>
+          <td>
+              <span *ngIf="!course.inEditMode">{{ course.daquiredMark }}</span>
+              <input *ngIf="course.inEditMode" [(ngModel)]="course.daquiredMark"/>
+          </td>
+            <td>{{course.nameOfExaminer}}</td>
+            <td>{{course.country}}</td>
+         <td>
+          <mat-icon *ngIf="!course.inEditMode" style="
+            height:20px !important;
+            width:20px !important;
+            font-size:35px !important;" (click)="course.inEditMode = !course.inEditMode" class="material-icons" >create</mat-icon>
+          <mat-icon *ngIf="course.inEditMode" style="
+            height:20px !important;
+            width:20px !important;
+            font-size:35px !important;" (click)="onUpdatecourse(course)" class="material-icons" >save</mat-icon>
+          <mat-icon *ngIf="course.inEditMode" style="
+          height:20px !important;
+          width:20px !important;
+          font-size:35px !important;" (click)="onCancelEdit(course)" class="material-icons">clear</mat-icon>  
+
+          <mat-icon *ngIf="course.inEditMode" style="
+               height:20px !important;
+               width:20px !important;
+               font-size:35px !important;" 
+               (click)="onSearch(course)"  
+               class="material-icons">search</mat-icon> 
+                   
+          </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>  -->

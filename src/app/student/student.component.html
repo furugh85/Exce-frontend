@@ -1,0 +1,155 @@
+
+
+<div class="mat-elevation-z8 mahsatb">
+  <table mat-table [dataSource]="users" style="width: 100%!important;">
+
+    <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="No">
+      <th mat-header-cell *matHeaderCellDef> No. </th>
+      <td mat-cell *matCellDef="let user"> {{user.id}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="Name">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let user"> {{user.name+user.id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Subject Of Study">
+      <th mat-header-cell *matHeaderCellDef> Subject of Study </th>
+      <td mat-cell *matCellDef="let user"> {{user.studiengang}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Matriculation">
+      <th mat-header-cell *matHeaderCellDef> Matriculation</th>
+      <td mat-cell *matCellDef="let user"> {{user.matrikelnummer}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Action </th>
+      <td mat-cell *matCellDef="let row">
+        <!-- <button mat-button  (click)="onOpenDialog(row.id)">Edit</button> -->
+        <mat-icon color="primary" style="
+         height:15px !important;
+         width:15px !important;
+         font-size:30px !important;" class="material-icons mhs-float" (click)="onOpenDialog(row.id)">visibility</mat-icon>
+      </td>
+
+    </ng-container>
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef>Delete</th>
+      <td mat-cell *matCellDef="let row">
+          <mat-icon color="primary" ng-really-message="are u sure?" class="material-icons mhs-float mhs-clear" (click)="onDeleteUser(row.id)">clear</mat-icon>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Files">
+      <th mat-header-cell *matHeaderCellDef>Files</th>
+      <td mat-cell *matCellDef="let row">
+        <label class="mhs-custom-file-upload">
+          <input type="file" (change)="selectFiles($event,row.id)" />
+          upload Files
+        </label>
+
+        <button class="btn mhs-btn-success" [disabled]="row.selectedFiles===false ||row.selectedFiles===undefined"
+          (click)="uploadfiles(row.id)">
+          Upload
+        </button>
+      
+        
+
+         <!-- <div *ngIf="message"  class="alert alert-secondary" role="alert">
+          {{ message }}
+        </div> -->
+        <div class="card mt-3">
+          <div class="card-header">List of Files</div>
+          <ul class="list-group list-group-flush" *ngFor="let file of row.files ;let i=index">
+            <li class="list-group-item">
+              <a href="{{ 'http://localhost:8080/user/files/'+file }}">{{file}}</a>
+              <i class="fa fa-trash listfiledel wobble-vertical" aria-hidden="true"  (click)="deleteFile(file,row.id)"></i>
+            </li>
+          </ul> 
+        </div>
+
+      </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let row">
+        <mat-icon color="primary" class="material-icons mhs-done mhs-float" (click)="onHidenSubmit(row.id)"
+          *ngIf="row.status==='completed'">done_all</mat-icon>
+          
+        <mat-icon style="
+         height:15px !important;
+         width:15px !important;
+         font-size:30px !important;" color="warn" class="material-icons" *ngIf="row.status!=='completed'">drafts
+        </mat-icon>
+      </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+  </table>
+
+  <mat-paginator #paginator [length]="resultsLength" [pageSize]="2" [pageSizeOptions]="[2, 4, 6]" showFirstLastButtons>
+  </mat-paginator>
+</div>
+
+
+
+
+
+
+
+<!-- <mat-icon style="
+          height:15px !important;
+          width:15px !important;
+          font-size:30px !important;" color="primary" class="material-icons"  (click)="uploadfiles(row.id)" >attach_file</mat-icon>
+     -->
+
+
+
+
+
+<!-- <div class="card my-5">
+  <div class="card-body">
+    <table class="table table-bordered table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">MatriculationNo</th>
+          <th scope="col">Studiengang</th>
+          <th scope="col">view</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.id }}</td>
+          <td>{{ user.name }}</td>
+          <td>{{ user.matrikelnummer }}</td>
+          <td>{{ user.studiengang }}</td>
+         <td><mat-icon style="
+          height:20px !important;
+          width:20px !important;
+          font-size:35px !important;" class="material-icons" (click)="onOpenDialog(user.id)">visibility</mat-icon>
+          
+        </td>
+        </tr>
+      </tbody>
+    </table>
+    <mat-paginator [length]="100"
+              [pageSize]="10"
+              [pageSizeOptions]="[5, 10, 25, 100]"
+              aria-label="Select page">
+    </mat-paginator>
+
+  </div>
+</div>   -->
